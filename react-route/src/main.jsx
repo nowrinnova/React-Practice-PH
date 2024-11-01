@@ -17,29 +17,30 @@ import UserDetails from './component/UserDetails/UserDetails';
 const router = createBrowserRouter([
   {
     path: "/",
+    errorElement:<ErrorPage></ErrorPage>,
     element:<Home/>,
     children: [
       {
         path:'/users',
         loader:()=>fetch('https://jsonplaceholder.typicode.com/users'),
         element:<Users></Users>,
-        errorElement:<ErrorPage></ErrorPage>,
+        // errorElement:<ErrorPage></ErrorPage>,
       },
       {
         path:'/users/:userId',
         loader:({params})=>fetch(`https://jsonplaceholder.typicode.com/users/${params.userId}`),
         element:<UserDetails></UserDetails>,
-        errorElement:<ErrorPage></ErrorPage>,
+        // errorElement:<ErrorPage></ErrorPage>,
       },
       {
         path: "/contract",
         element:<Contract></Contract>,
-        errorElement:<ErrorPage></ErrorPage>,
+        // errorElement:<ErrorPage></ErrorPage>,
       },
     {
       path:"/about",
       element:<About/>,
-      errorElement:<ErrorPage></ErrorPage>,
+      // errorElement:<ErrorPage></ErrorPage>,
     }]
   },
 ]);

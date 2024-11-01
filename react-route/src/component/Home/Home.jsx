@@ -1,12 +1,16 @@
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigation } from 'react-router-dom'
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export default function Home() {
+  const navigation=useNavigation()
   return (
     <div>
       <Header></Header> 
-      <Outlet></Outlet>
+      {
+        navigation.state==="loading"?<LoadingSpinner></LoadingSpinner>:<Outlet></Outlet>
+      }
       <Footer></Footer>
     </div>
   )
