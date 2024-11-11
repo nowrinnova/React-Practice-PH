@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
 export default function Register() {
+  const [errorMessage,setErrorMessage]=useState('')
   const handleRegister = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const username = event.target.username.value;
     const password = event.target.password.value;
+    //clear and reset the error massage
+    setErrorMessage('')
     createUserWithEmailAndPassword(auth, email, password)
     .then((result) => {
       // Signed up 
@@ -18,7 +21,7 @@ export default function Register() {
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorMessage)
+      setErrorMessage(errorMessage)
       // ..
     });
    
@@ -78,11 +81,15 @@ export default function Register() {
             name="password"
             placeholder="Password"
             className="grow"
+            required
           />
         </label>
         <div className="w-full mx-auto text-center">
           <button className="btn btn-accent btn-wide">Submit</button>
         </div>
+        {
+          errorMessage && <p className="text-sm my-4 text-center">{errorMessage}</p>
+        }
       </form>
     </div>
   );
