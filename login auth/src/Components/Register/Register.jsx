@@ -1,42 +1,53 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
-
 export default function Register() {
-  const [errorMessage,setErrorMessage]=useState('')
-  const [success,setSuccess]=useState(false)
-  const [showPassword,setShowPassword]=useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const handleRegister = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const username = event.target.username.value;
     const password = event.target.password.value;
+    const terms = event.target.terms.checked;
     //clear and reset the error massage
-    setErrorMessage('')
-    setSuccess(false)
-    if(password.length <6){
-      setErrorMessage('password should be more then 6 character')
+    setErrorMessage("");
+    //set the success massage when new users started
+    setSuccess(false);
+
+    if(!terms){
+      setErrorMessage('terms & condition in not accepted')
       return
     }
+
+    //check the password length is less then 6 ..if lower then return 
+    if (password.length < 6) {
+      setErrorMessage("password should be more then 6 character");
+      return;
+    }
+
+
+    //firebase auth
     createUserWithEmailAndPassword(auth, email, password)
-    .then((result) => {
-      // Signed up 
-      console.log(result.user)
-      setSuccess(true)
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      setErrorMessage(errorMessage)
-      setSuccess(false)
-      // ..
-    });
-    console.log(email, username, password);
+      .then((result) => {
+        // Signed up
+        console.log(result.user);
+        setSuccess(true);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrorMessage(errorMessage);
+        setSuccess(false);
+        // ..
+      });
+    console.log(email, username, password,terms);
   };
   return (
     <div className="max-w-lg mx-auto">
@@ -87,24 +98,35 @@ export default function Register() {
               clipRule="evenodd"
             />
           </svg>
-          <button className="absolute right-2" onClick={()=>setShowPassword(!showPassword)}>{showPassword?<FaEyeSlash />:<FaEye />}</button>
+          <button
+            className="absolute right-2"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </button>
           <input
-            type={showPassword?"text":'password'}
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="Password"
             className="grow"
             required
           />
         </label>
+        <div className="form-control">
+          <label className="label justify-start gap-2 cursor-pointer">
+          <input type="checkbox" name="terms" className="checkbox" />
+          <span className="label-text">Remember me</span>
+          </label>
+        </div>
         <div className="w-full mx-auto text-center">
           <button className="btn btn-accent btn-wide">Submit</button>
         </div>
-        {
-          errorMessage && <p className="text-sm my-4 text-center text-red-600">{errorMessage}</p>
-        }
-        {
-          success && toast('successfully login')
-        }
+        {errorMessage && (
+          <p className="text-sm my-4 text-center text-red-600">
+            {errorMessage}
+          </p>
+        )}
+        {success && toast("successfully login")}
       </form>
       <ToastContainer />
     </div>
