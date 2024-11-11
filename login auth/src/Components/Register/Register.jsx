@@ -1,8 +1,16 @@
 import React, { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.init";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
+
 export default function Register() {
   const [errorMessage,setErrorMessage]=useState('')
+  const [success,setSuccess]=useState(false)
+  const [showPassword,setShowPassword]=useState(false)
   const handleRegister = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -10,26 +18,29 @@ export default function Register() {
     const password = event.target.password.value;
     //clear and reset the error massage
     setErrorMessage('')
+    setSuccess(false)
+    if(password.length <6){
+      setErrorMessage('password should be more then 6 character')
+      return
+    }
     createUserWithEmailAndPassword(auth, email, password)
     .then((result) => {
       // Signed up 
-      // const user = userCredential.user;
-      // console.log(user)
-      // ...
       console.log(result.user)
+      setSuccess(true)
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       setErrorMessage(errorMessage)
+      setSuccess(false)
       // ..
     });
-   
     console.log(email, username, password);
   };
   return (
     <div className="max-w-lg mx-auto">
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleRegister} className="max-w-sm mx-auto">
         <label className="input input-bordered flex items-center gap-2 my-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +74,7 @@ export default function Register() {
             placeholder="Username"
           />
         </label>
-        <label className="input input-bordered flex items-center gap-2 my-4">
+        <label className="input input-bordered flex items-center gap-2 my-4 relative">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -76,8 +87,9 @@ export default function Register() {
               clipRule="evenodd"
             />
           </svg>
+          <button className="absolute right-2" onClick={()=>setShowPassword(!showPassword)}>{showPassword?<FaEyeSlash />:<FaEye />}</button>
           <input
-            type="password"
+            type={showPassword?"text":'password'}
             name="password"
             placeholder="Password"
             className="grow"
@@ -88,9 +100,13 @@ export default function Register() {
           <button className="btn btn-accent btn-wide">Submit</button>
         </div>
         {
-          errorMessage && <p className="text-sm my-4 text-center">{errorMessage}</p>
+          errorMessage && <p className="text-sm my-4 text-center text-red-600">{errorMessage}</p>
+        }
+        {
+          success && toast('successfully login')
         }
       </form>
+      <ToastContainer />
     </div>
   );
 }

@@ -7,6 +7,7 @@ export default function Root() {
     <div>
       <Navbar></Navbar>
       <Outlet></Outlet>
+      
     </div>
   )
 }
