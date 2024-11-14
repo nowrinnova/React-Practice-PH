@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
+import { AuthContext } from '../../Provider/AuthProvider'
+
 
 export default function NavBar() {
+  const {user,logOut} = useContext(AuthContext)
+  const handleSignOut=()=>{
+    logOut()
+    .then(()=>{})
+  }
+console.log(user)
   const links=<>
   <li><NavLink to={'/'}>Home</NavLink></li>
   <li><NavLink to={'/login'}>Login</NavLink></li>
@@ -40,7 +48,13 @@ export default function NavBar() {
     </ul>
   </div>
   <div className="navbar-end">
-    <a className="btn">Button</a>
+    {/* <a className="btn">{user? <p>{user.email}</p>:""}</a> */}
+    {
+      user?<>
+      <p>{user.email}</p>
+      <span onClick={handleSignOut} className='btn'>Sign out</span>
+      </> :<NavLink to={'/login'}>Login</NavLink>
+    }
   </div>
 </div>
   )
