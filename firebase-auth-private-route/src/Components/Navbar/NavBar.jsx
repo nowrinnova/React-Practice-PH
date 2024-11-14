@@ -14,6 +14,8 @@ console.log(user)
   <li><NavLink to={'/'}>Home</NavLink></li>
   <li><NavLink to={'/login'}>Login</NavLink></li>
   <li><NavLink to={'/register'}>Sign Up</NavLink></li>
+  
+  {user &&<li><NavLink to={'/orders'}>Orders</NavLink></li>}
 
   </>
   return (

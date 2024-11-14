@@ -1,32 +1,32 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
-import { AuthContext } from '../../Provider/AuthProvider';
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../Provider/AuthProvider";
 export default function Login() {
-  const {loginUser}=useContext(AuthContext)
+  const { loginUser } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState("");
 
   //handle the form when it's submitted
-  const handleLoginForm=(event)=>{
+  const handleLoginForm = (event) => {
     event.preventDefault();
-    setSuccess('')
+    setSuccess("");
 
     //take the email,password value from the input field
     const email = event.target.email.value;
     const password = event.target.password.value;
     console.log(email, password);
-    
-    loginUser(email,password)
-    .then(result=>{
-      setSuccess('login successfully')
-      console.log(result.user)
-    })
-    .catch(error=>{
-      console.log(error.message)
-    })
-  }
+
+    loginUser(email, password)
+      .then((result) => {
+        setSuccess("login successfully");
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
   return (
     <div className="max-w-[400px] mx-auto">
       <h1 className="text-2xl font-bold my-4 text-center">LogIn</h1>
@@ -48,7 +48,7 @@ export default function Login() {
             placeholder="Email"
           />
         </label>
-       
+
         <label className="input input-bordered flex items-center gap-2 my-4 relative">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +91,8 @@ export default function Login() {
         )} */}
         {success && (
           <p className="text-center text-sm text-green-700 my-4">{success}</p>
-        )} 
+        )}
       </form>
     </div>
-  )
+  );
 }
